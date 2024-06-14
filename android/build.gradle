@@ -1,8 +1,10 @@
 allprojects {
+    ext.kotlin_version = '1.8.22'
     repositories {
         google()
         mavenCentral()
     }
+
 }
 
 rootProject.buildDir = '../build'
