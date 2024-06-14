@@ -48,10 +48,11 @@ android {
         applicationId "com.tristans.suri"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
     }
 
     buildTypes {
@@ -67,14 +68,14 @@ android {
     productFlavors {
         production {
             dimension "default"
-            resValue "string", "app_name", "Nylo"
+            resValue "string", "app_name", "Suri"
             applicationIdSuffix ""
 
         }
 
         development {
             dimension "default"
-            resValue "string", "app_name", "Nylo Development"
+            resValue "string", "app_name", "Suri Development"
             applicationIdSuffix ".dev"
         }
     }
@@ -85,4 +86,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
