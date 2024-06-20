@@ -43,6 +43,7 @@ app.*.map.json
 /android/app/release
 
 # lib Related
+**/lib/services/messaging/*.json
 **/lib/firebase/
 
 # Firebase Related

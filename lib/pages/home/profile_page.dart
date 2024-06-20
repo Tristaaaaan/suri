@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/components/container/profile_settings.dart';
+import 'package:suri/provider/auth/auth_providers.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
@@ -75,10 +77,15 @@ class ProfilePage extends StatelessWidget {
             title: "Help",
             icon: Icons.help,
           ),
-          const ProfileSettingsContainer(
+          ProfileSettingsContainer(
             withSwitch: false,
             title: "Logout",
             icon: Icons.logout,
+            onTap: () async {
+              await ref.read(authServicesProvider).signOut();
+
+              print("LOGOUT");
+            },
           )
         ],
       ),
