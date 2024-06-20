@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:suri/app.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/firebase/dev/firebase_options.dart';
+import 'package:suri/pages/auth/signin_or_signup.dart';
+import 'package:suri/themes/light_mode.dart';
 
 @pragma('vm:entry-point')
 void main() async {
@@ -19,7 +21,7 @@ void main() async {
     systemNavigationBarIconBrightness: Brightness.dark,
   ));
 
-  runApp(const MainApp());
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -27,8 +29,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: App(flavor: "Development"),
+    return MaterialApp(
+      home: const SignInOrSignUp(),
+      theme: lightMode,
     );
   }
 }
