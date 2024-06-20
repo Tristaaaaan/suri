@@ -4,17 +4,21 @@ class ProfileSettingsContainer extends StatelessWidget {
   final bool withSwitch;
   final String title;
   final IconData icon;
+
+  final void Function()? onTap;
+
   const ProfileSettingsContainer({
     super.key,
     required this.withSwitch,
     required this.title,
     required this.icon,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           border: Border(

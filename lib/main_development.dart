@@ -2,12 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:suri/config/app_config.dart';
+import 'package:suri/config/app_environments.dart';
 import 'package:suri/firebase/dev/firebase_options.dart';
-import 'package:suri/pages/auth/signin_or_signup.dart';
+import 'package:suri/pages/auth/auth_gate.dart';
 import 'package:suri/themes/light_mode.dart';
 
 @pragma('vm:entry-point')
 void main() async {
+  AppConfig.setEnvironment(Flavors.development);
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     name: "suri-dev",
@@ -30,7 +34,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const SignInOrSignUp(),
+      home: const AuthGate(),
       theme: lightMode,
     );
   }
