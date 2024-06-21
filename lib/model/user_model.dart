@@ -6,6 +6,7 @@ class UserModel {
   final String email;
   final String fcmtoken;
   final String? imageUrl;
+  final bool notification;
 
   UserModel({
     required this.uid,
@@ -13,6 +14,7 @@ class UserModel {
     required this.email,
     required this.fcmtoken,
     this.imageUrl,
+    required this.notification,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class UserModel {
       'email': email,
       'fcmtoken': fcmtoken,
       'imageUrl': imageUrl,
+      'notification': notification,
     };
   }
 
@@ -32,6 +35,7 @@ class UserModel {
       email: map['email'] as String,
       fcmtoken: map['fcmtoken'] as String,
       imageUrl: map['imageUrl'] as String,
+      notification: map['notification'] as bool,
     );
   }
 
@@ -42,6 +46,7 @@ class UserModel {
       email: doc['email'],
       fcmtoken: doc['fcmtoken'],
       imageUrl: doc['imageUrl'],
+      notification: doc['notification'],
     );
   }
 }
