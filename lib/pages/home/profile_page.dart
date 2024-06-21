@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/components/container/profile_settings.dart';
@@ -7,116 +6,113 @@ import 'package:suri/provider/auth/auth_providers.dart';
 import 'package:suri/provider/auth/user_info_providers.dart';
 
 class ProfilePage extends ConsumerWidget {
-  ProfilePage({super.key});
+  final String imageUrl;
+  final String name;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  const ProfilePage({
+    super.key,
+    required this.imageUrl,
+    required this.name,
+  });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfoStream = ref.watch(userInfoProvider(_auth.currentUser!.uid));
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
         centerTitle: true,
       ),
-      body: userInfoStream.when(
-          data: (user) {
-            return SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.center,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        CircleAvatar(
-                          radius: 100,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          backgroundImage: NetworkImage(
-                            modifyImageUrl(user.imageUrl!, 's1080'),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          user.name!,
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "Settings",
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.secondary),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  ProfileSettingsContainer(
-                    withSwitch: true,
-                    title: "Notification",
-                    icon: Icons.notifications,
-                    ref: ref,
-                    userId: _auth.currentUser!.uid,
-                    notification: user.notification,
-                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "Utilities",
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.secondary),
+                  CircleAvatar(
+                    radius: 100,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    backgroundImage: NetworkImage(
+                      modifyImageUrl(imageUrl, 's1080'),
                     ),
                   ),
-                  const ProfileSettingsContainer(
-                    withSwitch: false,
-                    title: "About",
-                    icon: Icons.info,
+                  const SizedBox(
+                    height: 15,
                   ),
-                  const ProfileSettingsContainer(
-                    withSwitch: false,
-                    title: "Help",
-                    icon: Icons.help,
-                  ),
-                  ProfileSettingsContainer(
-                    withSwitch: false,
-                    title: "Logout",
-                    icon: Icons.logout,
-                    onTap: () async {
-                      await ref.read(authServicesProvider).signOutAccount(ref);
-
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    },
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   )
                 ],
               ),
-            );
-          },
-          error: (error, stackTrace) => Container(),
-          loading: () => Container()),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Settings",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.secondary),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ProfileSettingsContainer(
+              withSwitch: true,
+              title: "Notification",
+              icon: Icons.notifications,
+              ref: ref,
+              notification: ref.watch(userNotificationProvider),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Utilities",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.secondary),
+              ),
+            ),
+            const ProfileSettingsContainer(
+              withSwitch: false,
+              title: "About",
+              icon: Icons.info,
+            ),
+            const ProfileSettingsContainer(
+              withSwitch: false,
+              title: "Help",
+              icon: Icons.help,
+            ),
+            ProfileSettingsContainer(
+              withSwitch: false,
+              title: "Logout",
+              icon: Icons.logout,
+              onTap: () async {
+                await ref.read(authServicesProvider).signOutAccount(ref);
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }

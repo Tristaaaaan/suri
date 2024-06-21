@@ -69,6 +69,7 @@ class AuthServices {
   Future<void> signOutAccount(WidgetRef ref) async {
     // Cleaning all listeners to prevent permission denied error when signing out
     ref.invalidate(userInfoProvider);
+
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }

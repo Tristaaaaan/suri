@@ -7,7 +7,7 @@ class ProfileSettingsContainer extends StatelessWidget {
   final String title;
   final IconData icon;
   final bool? notification;
-  final String? userId;
+
   final void Function()? onTap;
   final WidgetRef? ref;
   const ProfileSettingsContainer({
@@ -18,7 +18,6 @@ class ProfileSettingsContainer extends StatelessWidget {
     this.onTap,
     this.notification,
     this.ref,
-    this.userId,
   });
 
   @override
@@ -71,13 +70,19 @@ class ProfileSettingsContainer extends StatelessWidget {
                     return Theme.of(context).colorScheme.primary;
                   },
                 ),
-                value: notification!,
+                value: ref!.watch(userNotificationProvider),
                 onChanged: (value) async {
                   print("VALUE: $value");
 
                   await ref!
                       .read(userInfoServicesProvider)
-                      .configureUserNotification(value, userId!);
+                      .configureUserNotification(value);
+
+                  if (ref!.watch(userNotificationProvider) == value) {
+                    ref!.read(userNotificationProvider.notifier).state = !value;
+                  } else {
+                    ref!.read(userNotificationProvider.notifier).state = value;
+                  }
                 },
               ),
             if (!withSwitch)
