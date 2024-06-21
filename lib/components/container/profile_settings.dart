@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:suri/provider/auth/user_info_providers.dart';
 
 class ProfileSettingsContainer extends StatelessWidget {
   final bool withSwitch;
   final String title;
   final IconData icon;
-
+  final bool? notification;
+  final String? userId;
   final void Function()? onTap;
-
+  final WidgetRef? ref;
   const ProfileSettingsContainer({
     super.key,
     required this.withSwitch,
     required this.title,
     required this.icon,
     this.onTap,
+    this.notification,
+    this.ref,
+    this.userId,
   });
 
   @override
@@ -52,7 +58,7 @@ class ProfileSettingsContainer extends StatelessWidget {
             ),
             if (withSwitch)
               Switch(
-                inactiveThumbColor: Theme.of(context).colorScheme.tertiary,
+                inactiveThumbColor: Theme.of(context).colorScheme.primary,
                 activeColor: Theme.of(context).colorScheme.primary,
                 trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
                   (Set<MaterialState> states) {
@@ -65,9 +71,13 @@ class ProfileSettingsContainer extends StatelessWidget {
                     return Theme.of(context).colorScheme.primary;
                   },
                 ),
-                value: true,
-                onChanged: (value) {
-                  print(value);
+                value: notification!,
+                onChanged: (value) async {
+                  print("VALUE: $value");
+
+                  await ref!
+                      .read(userInfoServicesProvider)
+                      .configureUserNotification(value, userId!);
                 },
               ),
             if (!withSwitch)

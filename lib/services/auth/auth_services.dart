@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:suri/components/snackbar/information_snackbar.dart';
 import 'package:suri/model/user_model.dart';
+import 'package:suri/provider/auth/user_info_providers.dart';
 import 'package:suri/provider/messaging/messaging_providers.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -30,14 +30,13 @@ class AuthServices {
         final UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
 
-        print("FCM token: $fcmtoken");
-
         UserModel newUserData = UserModel(
           uid: userCredential.user!.uid,
           email: userCredential.user!.email!,
           fcmtoken: fcmtoken!,
           name: userCredential.user!.displayName!,
           imageUrl: userCredential.user!.photoURL.toString(),
+          notification: true,
         );
 
         final DocumentReference docRef =
@@ -53,7 +52,6 @@ class AuthServices {
         } else {
           // Document does not exist, create it
 
-          print("creating new user");
           await docRef.set(newUserData.toMap());
         }
 
@@ -61,20 +59,16 @@ class AuthServices {
       }
       return null;
     } catch (e) {
-      print("Error: $e");
-      await signOut(); // Sign out the user
-      if (context.mounted) {
-        informationSnackBar(
-          context,
-          Icons.info_outline,
-          'Email domain is not allowed.',
-        );
-      }
+      print("error $e");
+      await signOutAccount(ref); // Sign out the user
+
       return null;
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOutAccount(WidgetRef ref) async {
+    // Cleaning all listeners to prevent permission denied error when signing out
+    ref.invalidate(userInfoProvider);
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
