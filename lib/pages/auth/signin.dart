@@ -1,82 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:suri/components/button/regular_button.dart';
 import 'package:suri/pages/auth/signin_or_signup.dart';
-import 'package:suri/provider/auth/auth_providers.dart';
 
 class Signin extends ConsumerWidget {
   const Signin({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(googleSignInLoading);
     return Scaffold(
       body: Center(
-        child: SizedBox(
-          height: 200,
-          child: Column(
-            children: [
-              TextButton(
-                onPressed: () {
-                  ref.read(signInOrSignUpProvider.notifier).state = false;
-                },
-                child: const Text("SignUp"),
-              ),
-              Container(
-                height: 50,
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 25,
+        child: SingleChildScrollView(
+          child: IntrinsicHeight(
+            child: Column(
+              children: [
+                RegularButton(
+                  text: "Signin",
+                  withIcon: false,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  textColor: Theme.of(context).colorScheme.background,
+                  buttonKey: "signin",
                 ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
+                const SizedBox(
+                  height: 25,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: Divider(
+                            color: Theme.of(context).colorScheme.secondary,
+                            thickness: 1,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "or continue with",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 12),
+                      ),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Divider(
+                            color: Theme.of(context).colorScheme.secondary,
+                            thickness: 1,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: GestureDetector(
-                    onTap: isLoading
-                        ? null
-                        : () async {
-                            final signin =
-                                ref.read(googleSignInLoading.notifier);
-                            signin.update((state) => true);
-
-                            await ref
-                                .read(authServicesProvider)
-                                .signInWithGoogle(ref, context);
-
-                            signin.update(
-                              (state) => false,
-                            );
-                          },
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/google-color_svgrepo.com.svg',
-                          height: 20,
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: isLoading
-                              ? const Center(child: CircularProgressIndicator())
-                              : const Text(
-                                  "Google",
-                                  textAlign: TextAlign.center,
-                                ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                      ],
+                const SizedBox(
+                  height: 25,
+                ),
+                RegularButton(
+                  text: "Google",
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  textColor: Theme.of(context).colorScheme.primary,
+                  buttonKey: "signinwithgoogle",
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don't have an account?",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: 14)),
+                    const SizedBox(
+                      width: 5,
                     ),
-                  ),
-                ),
-              ),
-            ],
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(signInOrSignUpProvider.notifier).state = false;
+                      },
+                      child: Text(
+                        "Sign up",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
