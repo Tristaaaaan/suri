@@ -11,15 +11,3 @@ final authServicesProvider = Provider<AuthServices>((ref) {
 final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
-
-final googleSignInLoadingProvider =
-    StateNotifierProvider<GoogleSignInLoadingNotifier, Map<String, bool>>(
-        (ref) => GoogleSignInLoadingNotifier());
-
-class GoogleSignInLoadingNotifier extends StateNotifier<Map<String, bool>> {
-  GoogleSignInLoadingNotifier() : super({});
-
-  void setLoading(String buttonKey, bool isLoading) {
-    state = {...state, buttonKey: isLoading};
-  }
-}
