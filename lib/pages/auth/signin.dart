@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/components/button/regular_button.dart';
+import 'package:suri/components/textfield/rounded_textfield_title.dart';
 import 'package:suri/pages/auth/signin_or_signup.dart';
 
 class Signin extends ConsumerWidget {
-  const Signin({super.key});
+  Signin({super.key});
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -14,6 +17,37 @@ class Signin extends ConsumerWidget {
           child: IntrinsicHeight(
             child: Column(
               children: [
+                RoundedTextField(
+                  hinttext: "Email",
+                  controller: _emailController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                RoundedTextField(
+                  hinttext: "Password",
+                  controller: _passwordController,
+                  withButton: true,
+                  eyeKey: 'passwordKey',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 RegularButton(
                   text: "Signin",
                   withIcon: false,
@@ -22,7 +56,7 @@ class Signin extends ConsumerWidget {
                   buttonKey: "signin",
                 ),
                 const SizedBox(
-                  height: 25,
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -56,7 +90,7 @@ class Signin extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 25,
+                  height: 15,
                 ),
                 RegularButton(
                   text: "Google",

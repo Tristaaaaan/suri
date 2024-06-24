@@ -15,7 +15,7 @@ class SignInOrSignUp extends ConsumerWidget {
     final signInOrSignUp = ref.watch(signInOrSignUpProvider);
 
     if (signInOrSignUp) {
-      return const Signin();
+      return Signin();
     } else {
       return const Signup();
     }
