@@ -17,7 +17,7 @@ class SignInOrSignUp extends ConsumerWidget {
     if (signInOrSignUp) {
       return Signin();
     } else {
-      return const Signup();
+      return Signup();
     }
   }
 }
