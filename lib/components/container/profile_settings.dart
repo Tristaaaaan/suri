@@ -72,8 +72,6 @@ class ProfileSettingsContainer extends StatelessWidget {
                 ),
                 value: ref!.watch(userNotificationProvider),
                 onChanged: (value) async {
-                  print("VALUE: $value");
-
                   await ref!
                       .read(userInfoServicesProvider)
                       .configureUserNotification(value);

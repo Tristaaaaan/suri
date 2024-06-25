@@ -59,7 +59,6 @@ class AuthServices {
       }
       return null;
     } catch (e) {
-      print("error $e");
       await signOutAccount(ref); // Sign out the user
 
       return null;
