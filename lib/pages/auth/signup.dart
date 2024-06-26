@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:suri/components/button/regular_button.dart';
 import 'package:suri/components/textfield/rounded_textfield_title.dart';
 import 'package:suri/pages/auth/signin_or_signup.dart';
+import 'package:suri/provider/auth/auth_providers.dart';
+
+final lastPageProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 class Signup extends ConsumerWidget {
   Signup({super.key});
@@ -20,6 +22,12 @@ class Signup extends ConsumerWidget {
   final controller = PageController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firstName = ref.watch(requestFirstName);
+    final lastName = ref.watch(requestLastName);
+    final email = ref.watch(requestEmail);
+    final password = ref.watch(requestPassword);
+    final confirmPassword = ref.watch(requestConfirmPassword);
+    final lastPage = ref.watch(lastPageProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Create an account"),
@@ -45,6 +53,9 @@ class Signup extends ConsumerWidget {
               RoundedTextField(
                 hinttext: "First Name",
                 controller: _firstNameController,
+                onChanged: (firstName) {
+                  ref.read(requestFirstName.notifier).state = firstName;
+                },
               ),
               const SizedBox(
                 height: 15,
@@ -52,16 +63,9 @@ class Signup extends ConsumerWidget {
               RoundedTextField(
                 hinttext: "Last Name",
                 controller: _lastNameController,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              RegularButton(
-                text: "Proceed",
-                withIcon: false,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                textColor: Theme.of(context).colorScheme.background,
-                buttonKey: "proceed",
+                onChanged: (lastName) {
+                  ref.read(requestLastName.notifier).state = lastName;
+                },
               ),
             ],
           ),
@@ -93,26 +97,30 @@ class Signup extends ConsumerWidget {
                 withButton: true,
                 eyeKey: 'confirmpasswordKey',
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              RegularButton(
-                text: "Sign up",
-                withIcon: false,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                textColor: Theme.of(context).colorScheme.background,
-                buttonKey: "signUp",
-              ),
             ],
           ),
         ],
       ),
-      bottomSheet: Stack(
-        children: [
-          SizedBox(
-            height: 80,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+      bottomSheet: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        height: 80,
+        child: Stack(
+          children: [
+            if (lastPage)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                    child: const Text("Back"),
+                    onPressed: () {
+                      controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                      ref.read(lastPageProvider.notifier).state = false;
+                    }),
+              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
                   child: SmoothPageIndicator(
@@ -162,8 +170,29 @@ class Signup extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                child: lastPage ? const Text("Sign up") : const Text("Proceed"),
+                onPressed: () {
+                  if (!lastPage) {
+                    if (firstName.isNotEmpty && lastName.isNotEmpty) {
+                      controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                      ref.read(lastPageProvider.notifier).state = true;
+                    } else {
+                      if (email.isNotEmpty &&
+                          password.isNotEmpty &&
+                          confirmPassword.isNotEmpty) {}
+                    }
+                  } else {}
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
