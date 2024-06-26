@@ -11,3 +11,9 @@ final authServicesProvider = Provider<AuthServices>((ref) {
 final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
+
+final requestFirstName = StateProvider.autoDispose<String>((ref) => "");
+final requestLastName = StateProvider.autoDispose<String>((ref) => "");
+final requestEmail = StateProvider.autoDispose<String>((ref) => "");
+final requestPassword = StateProvider.autoDispose<String>((ref) => "");
+final requestConfirmPassword = StateProvider.autoDispose<String>((ref) => "");

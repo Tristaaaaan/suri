@@ -4,7 +4,7 @@ import 'package:suri/provider/components/eye_focus_state_notifier.dart';
 
 class RoundedTextField extends ConsumerWidget {
   final String hinttext;
-
+  final void Function(String)? onChanged;
   final TextEditingController controller;
   final bool? withButton;
 
@@ -13,6 +13,7 @@ class RoundedTextField extends ConsumerWidget {
   const RoundedTextField({
     super.key,
     required this.hinttext,
+    this.onChanged,
     required this.controller,
     this.withButton = false,
     this.eyeKey,
@@ -29,6 +30,7 @@ class RoundedTextField extends ConsumerWidget {
             obscureText: show ? true : false,
             minLines: 1,
             maxLines: 1,
+            onChanged: onChanged,
             controller: controller,
             decoration: InputDecoration(
                 suffixIcon: withButton!

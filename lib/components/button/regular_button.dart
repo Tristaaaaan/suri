@@ -10,7 +10,8 @@ class RegularButton extends ConsumerWidget {
   final Color backgroundColor;
   final Color textColor;
   final String buttonKey;
-
+  final bool? withoutLoading;
+  final void Function()? onTap;
   const RegularButton({
     super.key,
     this.withIcon = true,
@@ -18,6 +19,8 @@ class RegularButton extends ConsumerWidget {
     required this.backgroundColor,
     required this.textColor,
     required this.buttonKey,
+    this.withoutLoading = false,
+    this.onTap,
   });
 
   @override
@@ -40,18 +43,20 @@ class RegularButton extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: GestureDetector(
-          onTap: isLoading
-              ? null
-              : () async {
-                  final signInNotifier =
-                      ref.read(googleSignInLoadingProvider.notifier);
-                  signInNotifier.setLoading(buttonKey, true);
-                  await ref
-                      .read(authServicesProvider)
-                      .signInWithGoogle(ref, context);
+          onTap: withoutLoading!
+              ? onTap
+              : isLoading
+                  ? null
+                  : () async {
+                      final signInNotifier =
+                          ref.read(googleSignInLoadingProvider.notifier);
+                      signInNotifier.setLoading(buttonKey, true);
+                      await ref
+                          .read(authServicesProvider)
+                          .signInWithGoogle(ref, context);
 
-                  signInNotifier.setLoading(buttonKey, false);
-                },
+                      signInNotifier.setLoading(buttonKey, false);
+                    },
           child: Row(
             children: [
               if (withIcon == true)
