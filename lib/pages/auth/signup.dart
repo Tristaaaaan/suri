@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:suri/components/snackbar/information_snackbar.dart';
 import 'package:suri/components/textfield/rounded_textfield_title.dart';
 import 'package:suri/pages/auth/signin_or_signup.dart';
+import 'package:suri/pages/home/home_page.dart';
 import 'package:suri/provider/auth/auth_providers.dart';
 
 final lastPageProvider = StateProvider.autoDispose<bool>((ref) => false);
@@ -78,6 +80,9 @@ class Signup extends ConsumerWidget {
               RoundedTextField(
                 hinttext: "Email",
                 controller: _emailController,
+                onChanged: (email) {
+                  ref.read(requestEmail.notifier).state = email;
+                },
               ),
               const SizedBox(
                 height: 15,
@@ -87,6 +92,9 @@ class Signup extends ConsumerWidget {
                 controller: _createPasswordController,
                 withButton: true,
                 eyeKey: 'createpasswordKey',
+                onChanged: (createPassword) {
+                  ref.read(requestPassword.notifier).state = createPassword;
+                },
               ),
               const SizedBox(
                 height: 15,
@@ -96,6 +104,9 @@ class Signup extends ConsumerWidget {
                 controller: _confirmPasswordController,
                 withButton: true,
                 eyeKey: 'confirmpasswordKey',
+                onChanged: (confirmPassword) {
+                  ref.read(requestConfirmPassword.notifier).state = email;
+                },
               ),
             ],
           ),
@@ -183,11 +194,41 @@ class Signup extends ConsumerWidget {
                       );
                       ref.read(lastPageProvider.notifier).state = true;
                     } else {
-                      if (email.isNotEmpty &&
-                          password.isNotEmpty &&
-                          confirmPassword.isNotEmpty) {}
+                      informationSnackBar(
+                        context,
+                        Icons.error,
+                        "Please fill in all fields",
+                      );
                     }
-                  } else {}
+                  } else {
+                    print("Email: $email");
+                    if (email.isNotEmpty &&
+                        password.isNotEmpty &&
+                        confirmPassword.isNotEmpty) {
+                      if (password == confirmPassword) {
+                        print("Req Password match: $confirmPassword");
+                        print("Confirm Password match: $password");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(),
+                          ),
+                        );
+                      } else {
+                        informationSnackBar(
+                          context,
+                          Icons.error,
+                          "Passwords do not match",
+                        );
+                      }
+                    } else {
+                      informationSnackBar(
+                        context,
+                        Icons.error,
+                        "Please fill in all fields",
+                      );
+                    }
+                  }
                 },
               ),
             ),
