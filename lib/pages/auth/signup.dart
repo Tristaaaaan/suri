@@ -201,13 +201,12 @@ class Signup extends ConsumerWidget {
                       );
                     }
                   } else {
-                    print("Email: $email");
+           
                     if (email.isNotEmpty &&
                         password.isNotEmpty &&
                         confirmPassword.isNotEmpty) {
                       if (password == confirmPassword) {
-                        print("Req Password match: $confirmPassword");
-                        print("Confirm Password match: $password");
+       
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -15,7 +15,7 @@ class FirebaseMessage {
   Future<void> initNotifications() async {
     await firebaseMessaging.requestPermission();
 
-    NotificationSettings settings = await firebaseMessaging.requestPermission(
+    await firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -24,15 +24,6 @@ class FirebaseMessage {
       provisional: false,
       sound: true,
     );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-    } else if (settings.authorizationStatus ==
-        AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
-    } else {
-      print('User declined or has not accepted permission');
-    }
 
     AwesomeNotifications().initialize(
       null,
