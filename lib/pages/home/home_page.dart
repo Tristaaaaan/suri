@@ -1,87 +1,134 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:suri/functions/name_formatter.dart';
-import 'package:suri/pages/home/history_page.dart';
-import 'package:suri/pages/home/observe_page.dart';
-import 'package:suri/pages/home/profile_page.dart';
-import 'package:suri/provider/auth/user_info_providers.dart';
+import 'package:suri/components/container/info_container.dart';
 
-final bottomNavProvider = StateProvider.autoDispose<int>((ref) => 0);
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
-List<Widget> pages = [
-  const ObservePage(),
-  const ObservePage(),
-  const HistoryPage(),
-];
-
-class HomePage extends ConsumerWidget {
-  HomePage({super.key});
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userInfoStream = ref.watch(userInfoProvider(_auth.currentUser!.uid));
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) {
+    return Center(
+      child: Scaffold(
+        body: Column(
           children: [
-            userInfoStream.when(
-              data: (data) {
-                return Text(
-                  "Hi ${formatName(data.name!)},",
-                  style: const TextStyle(fontSize: 16),
-                );
-              },
-              error: (error, stackTrace) => Container(),
-              loading: () => Container(),
+            const SizedBox(
+              height: 20,
             ),
-            const Text("Welcome back", style: TextStyle(fontSize: 16))
+            IntrinsicHeight(
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Today's Detection Summary",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.background,
+                          fontSize: 20),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "90",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 50),
+                            ),
+                            Text(
+                              "Ripe",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "90",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 50),
+                            ),
+                            Text(
+                              "Ripe",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "90",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 50),
+                            ),
+                            Text(
+                              "Ripe",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "90",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                  fontSize: 50),
+                            ),
+                            Text(
+                              "Ripe",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.background,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.separated(
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return const InformationContainer();
+                  }),
+            )
           ],
         ),
-        automaticallyImplyLeading: false,
-        actions: [
-          userInfoStream.when(
-            data: (user) {
-              return GestureDetector(
-                onTap: () {
-                  ref.read(userNotificationProvider.notifier).state =
-                      user.notification;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                        imageUrl: user.imageUrl!,
-                        name: user.name!,
-                      ),
-                    ),
-                  );
-                },
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  backgroundImage: NetworkImage(
-                    user.imageUrl!,
-                  ),
-                ),
-              );
-            },
-            error: (error, stackTrace) => Container(),
-            loading: () => Container(),
-          )
-        ],
-      ),
-      body: pages[ref.watch(bottomNavProvider)],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: ref.watch(bottomNavProvider),
-        onTap: (int index) {
-          ref.read(bottomNavProvider.notifier).state = index;
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.camera), label: "Observe"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-        ],
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:suri/components/snackbar/information_snackbar.dart';
 import 'package:suri/components/textfield/rounded_textfield_title.dart';
 import 'package:suri/pages/auth/signin_or_signup.dart';
-import 'package:suri/pages/home/home_page.dart';
+import 'package:suri/pages/home/main_page.dart';
 import 'package:suri/provider/auth/auth_providers.dart';
 
 final lastPageProvider = StateProvider.autoDispose<bool>((ref) => false);
@@ -201,16 +201,14 @@ class Signup extends ConsumerWidget {
                       );
                     }
                   } else {
-           
                     if (email.isNotEmpty &&
                         password.isNotEmpty &&
                         confirmPassword.isNotEmpty) {
                       if (password == confirmPassword) {
-       
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomePage(),
+                            builder: (context) => MainPage(),
                           ),
                         );
                       } else {
