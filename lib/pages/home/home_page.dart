@@ -2,8 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/functions/name_formatter.dart';
+import 'package:suri/pages/home/history_page.dart';
+import 'package:suri/pages/home/observe_page.dart';
 import 'package:suri/pages/home/profile_page.dart';
 import 'package:suri/provider/auth/user_info_providers.dart';
+
+final bottomNavProvider = StateProvider.autoDispose<int>((ref) => 0);
+
+List<Widget> pages = [
+  const ObservePage(),
+  const ObservePage(),
+  const HistoryPage(),
+];
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key});
@@ -59,6 +69,18 @@ class HomePage extends ConsumerWidget {
             error: (error, stackTrace) => Container(),
             loading: () => Container(),
           )
+        ],
+      ),
+      body: pages[ref.watch(bottomNavProvider)],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: ref.watch(bottomNavProvider),
+        onTap: (int index) {
+          ref.read(bottomNavProvider.notifier).state = index;
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.camera), label: "Observe"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
         ],
       ),
     );
