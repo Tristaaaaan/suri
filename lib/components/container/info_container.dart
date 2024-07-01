@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:suri/components/dialog/info_dialog.dart';
+import 'package:suri/model/data_model.dart';
 
 class InformationContainer extends StatelessWidget {
-  const InformationContainer({super.key});
+  final DataModel data;
+  const InformationContainer({
+    super.key,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showInfoDialog(context, "Title", "message");
+        showInfoDialog(context, "Title", "message", data.classCounts);
+
+        print("data: ${data.toMap()}");
       },
       child: IntrinsicHeight(
           child: Container(
@@ -21,25 +28,25 @@ class InformationContainer extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                Icon(Icons.check),
-                SizedBox(
+                const Icon(Icons.check),
+                const SizedBox(
                   width: 10,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("1st Cycle"),
-                    Text("Monday, September 25, 2023"),
+                    Text(data.timestamp.toString()),
+                    const Text("Monday, September 25, 2023"),
                   ],
                 )
               ],
             ),
-            Text("10:30 AM"),
+            const Text("10:30 AM"),
           ],
         ),
       )),

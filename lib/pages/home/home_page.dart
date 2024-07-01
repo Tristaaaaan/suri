@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/components/container/info_container.dart';
+import 'package:suri/model/data_model.dart';
+import 'package:suri/provider/data/detection_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final detectionInfo = ref.watch(detectionInfoProvider);
     return Center(
       child: Scaffold(
         body: Column(
@@ -115,18 +119,33 @@ class HomePage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Expanded(
-              child: ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 10,
-                    );
-                  },
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return const InformationContainer();
-                  }),
-            )
+            detectionInfo.when(
+              data: (data) {
+                return Expanded(
+                  child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: 10,
+                        );
+                      },
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final DataModel detection = data[index];
+                        return InformationContainer(
+                          data: detection,
+                        );
+                      }),
+                );
+              },
+              error: (error, stackTrace) {
+                return Text(error.toString());
+              },
+              loading: () {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           ],
         ),
       ),
