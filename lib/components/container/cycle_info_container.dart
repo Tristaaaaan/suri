@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CycleInfoContainer extends StatelessWidget {
+  final String count;
   const CycleInfoContainer({
     super.key,
+    required this.count,
   });
 
   @override
@@ -27,7 +29,7 @@ class CycleInfoContainer extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondary,
               ),
               child: Text(
-                "25",
+                count,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.background,
                 ),
