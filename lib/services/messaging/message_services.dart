@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer' as devtools show log;
-import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,13 +8,31 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:suri/config/app_config.dart';
 import 'package:suri/config/app_environments.dart';
 
+// @pragma('vm:entry-point')
+// Future<void> handleBackgroundMessage(RemoteMessage message) async {
+//   devtools.log('Handling a background message ${message.messageId}');
+//   devtools.log(message.data.toString());
+//   showNotification(message);
+// }
+
+void showNotification(RemoteMessage message) {
+  AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: message.messageId.hashCode,
+      channelKey: 'high_importance_channel',
+      title: message.notification?.title,
+      body: message.notification?.body,
+    ),
+  );
+}
+
 class FirebaseMessage {
   final firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
     await firebaseMessaging.requestPermission();
 
-    await firebaseMessaging.requestPermission(
+    NotificationSettings settings = await firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -24,6 +41,15 @@ class FirebaseMessage {
       provisional: false,
       sound: true,
     );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
 
     AwesomeNotifications().initialize(
       null,
@@ -66,38 +92,30 @@ class FirebaseMessage {
       badge: true,
       sound: true,
     );
-    //FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
-    FirebaseMessaging.onMessage.listen(
-      (RemoteMessage message) async {
-        if (message.notification != null) {
-          int id = Random().nextInt(1000000);
-          await AwesomeNotifications().createNotification(
-            content: NotificationContent(
-              id: id,
-              channelKey: 'high_importance_channel',
-              title: message.data['title'],
-              body: message.data['body'],
-              actionType: ActionType.SilentAction,
-              notificationLayout: NotificationLayout.Default,
-              payload: {
-                // "navigate": "true",
-              },
-            ),
-          );
-        }
-      },
-    );
+    // FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
-    FirebaseMessaging.instance.getInitialMessage().then(
-          (value) => {
-            if (value != null) {},
-          },
-        );
-
-    FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) {},
-    );
+    // FirebaseMessaging.onMessage.listen(
+    //   (RemoteMessage message) async {
+    //     print("Notification has been received in the background.");
+    //     if (message.notification != null) {
+    //       showNotification(message);
+    //       // int id = Random().nextInt(1000000);
+    //       // await AwesomeNotifications().createNotification(
+    //       //   content: NotificationContent(
+    //       //     id: id,
+    //       //     channelKey: 'high_importance_channel',
+    //       //     title: message.data['title'],
+    //       //     body: message.data['body'],
+    //       //     actionType: ActionType.SilentAction,
+    //       //     notificationLayout: NotificationLayout.Default,
+    //       //     payload: {},
+    //       //   ),
+    //       // );
+    //       // print("message: ${message.toMap()}");
+    //     }
+    //   },
+    // );
   }
 
   Future<String?> getFCMToken() async {
