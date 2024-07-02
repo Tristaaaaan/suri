@@ -13,9 +13,11 @@ class InformationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showInfoDialog(context, "Title", "message", data.classCounts);
-
-        print("data: ${data.toMap()}");
+        showInfoDialog(
+          context,
+          data.classCounts,
+          data.downloadUrl,
+        );
       },
       child: IntrinsicHeight(
           child: Container(

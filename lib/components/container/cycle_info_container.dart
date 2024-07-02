@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class CycleInfoContainer extends StatelessWidget {
   final String count;
+  final String label;
   const CycleInfoContainer({
     super.key,
     required this.count,
+    required this.label,
   });
 
   @override
@@ -16,7 +18,7 @@ class CycleInfoContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Ripe Coffee Berry",
+              label,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.background,
                   fontSize: 16),
