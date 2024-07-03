@@ -97,7 +97,6 @@ class FirebaseMessage {
 
     // FirebaseMessaging.onMessage.listen(
     //   (RemoteMessage message) async {
-    //     print("Notification has been received in the background.");
     //     if (message.notification != null) {
     //       showNotification(message);
     //       // int id = Random().nextInt(1000000);
