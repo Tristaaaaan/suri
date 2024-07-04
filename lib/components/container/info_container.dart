@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:suri/components/dialog/info_dialog.dart';
 import 'package:suri/model/data_model.dart';
 
@@ -42,13 +43,19 @@ class InformationContainer extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(data.timestamp.toString()),
-                    const Text("Monday, September 25, 2023"),
+                    Text(
+                      DateFormat('EEEE, MMMM d, yyyy').format(data.timestamp),
+                    ),
+                    Text(
+                      DateFormat('EEEE, MMMM d, yyyy').format(data.timestamp),
+                    ),
                   ],
                 )
               ],
             ),
-            const Text("10:30 AM"),
+            Text(
+              DateFormat('hh:mm:ss a').format(data.timestamp),
+            ),
           ],
         ),
       )),
