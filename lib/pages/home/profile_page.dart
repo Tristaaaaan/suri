@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/components/container/profile_settings.dart';
 import 'package:suri/functions/modify_profile_image_size.dart';
 import 'package:suri/pages/home/about_page.dart';
+import 'package:suri/pages/home/help_page.dart';
 import 'package:suri/provider/auth/auth_providers.dart';
 import 'package:suri/provider/auth/user_info_providers.dart';
 
@@ -94,14 +95,26 @@ class ProfilePage extends ConsumerWidget {
               title: "About",
               icon: Icons.info,
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AboutPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AboutPage(),
+                  ),
+                );
               },
             ),
-            const ProfileSettingsContainer(
+            ProfileSettingsContainer(
               withSwitch: false,
               title: "Help",
               icon: Icons.help,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HelpPage(),
+                  ),
+                );
+              },
             ),
             ProfileSettingsContainer(
               withSwitch: false,

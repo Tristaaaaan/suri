@@ -92,29 +92,6 @@ class FirebaseMessage {
       badge: true,
       sound: true,
     );
-
-    // FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-
-    // FirebaseMessaging.onMessage.listen(
-    //   (RemoteMessage message) async {
-    //     if (message.notification != null) {
-    //       showNotification(message);
-    //       // int id = Random().nextInt(1000000);
-    //       // await AwesomeNotifications().createNotification(
-    //       //   content: NotificationContent(
-    //       //     id: id,
-    //       //     channelKey: 'high_importance_channel',
-    //       //     title: message.data['title'],
-    //       //     body: message.data['body'],
-    //       //     actionType: ActionType.SilentAction,
-    //       //     notificationLayout: NotificationLayout.Default,
-    //       //     payload: {},
-    //       //   ),
-    //       // );
-    //       // print("message: ${message.toMap()}");
-    //     }
-    //   },
-    // );
   }
 
   Future<String?> getFCMToken() async {

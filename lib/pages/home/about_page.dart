@@ -14,7 +14,8 @@ class AboutPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
-            "This application is Develop for our thesis titled “DESIGN AND DEVELOPMENT OF A COFFEE BORER BEETLE DETECTION SYSTEM”, an early detection of CBB infestation can help prevent further damage to coffee plantations.",
+            "Welcome to SURI, the cutting-edge mobile application developed as part of our thesis project titled \"Design and Development of a Coffee Borer Beetle Detection System.\" Our mission is to revolutionize the way coffee farmers detect and combat the Coffee Berry Borer (CBB) infestation.\n\n"
+            "At SURI, we understand the critical importance of early detection in safeguarding coffee plantations. The Coffee Berry Borer poses a significant threat, causing extensive damage to coffee crops worldwide. With our innovative application, farmers can now detect signs of CBB infestation early on, enabling prompt and effective intervention to mitigate its spread.",
             style: TextStyle(fontSize: 16.0),
           ),
         ),
