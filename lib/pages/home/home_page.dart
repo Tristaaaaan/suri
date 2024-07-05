@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:suri/components/container/info_container.dart';
+import 'package:suri/components/loading/data_loading.dart';
 import 'package:suri/model/data_model.dart';
 import 'package:suri/provider/data/detection_provider.dart';
 
@@ -141,8 +143,13 @@ class HomePage extends ConsumerWidget {
                 return Text(error.toString());
               },
               loading: () {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey[400]!,
+                  highlightColor: Colors.grey[300]!,
+                  child: const SizedBox(
+                    height: 300,
+                    child: DataLoading(),
+                  ),
                 );
               },
             ),

@@ -26,7 +26,12 @@ class InformationContainer extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
           border: Border.all(
             color: Theme.of(context).colorScheme.primary,
           ),
