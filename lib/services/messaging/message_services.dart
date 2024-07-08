@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer' as devtools show log;
+import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -91,6 +92,25 @@ class FirebaseMessage {
       alert: true,
       badge: true,
       sound: true,
+    );
+
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) async {
+        if (message.notification != null) {
+          int id = Random().nextInt(1000000);
+          await AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: id,
+              channelKey: 'high_importance_channel',
+              title: message.notification?.title,
+              body: message.notification?.body,
+              actionType: ActionType.SilentAction,
+              notificationLayout: NotificationLayout.Default,
+              payload: {},
+            ),
+          );
+        }
+      },
     );
   }
 

@@ -12,6 +12,7 @@ class InformationContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ClassificationModel classification = data.classCounts;
     return GestureDetector(
       onTap: () {
         showInfoDialog(
@@ -39,21 +40,59 @@ class InformationContainer extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.check),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(
-                      DateFormat('EEEE, MMMM d, yyyy').format(data.timestamp),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          DateFormat('EEEE, MMMM d, yyyy')
+                              .format(data.timestamp),
+                        ),
+                        Text(
+                          DateFormat('EEEE, MMMM d, yyyy')
+                              .format(data.timestamp),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  children: [
+                    ResultBox(
+                      type: "Ripe",
+                      count: classification.ripe.toString(),
                     ),
-                    Text(
-                      DateFormat('EEEE, MMMM d, yyyy').format(data.timestamp),
+                    VerticalDivider(
+                        thickness: 4,
+                        color: Theme.of(context).colorScheme.primary),
+                    ResultBox(
+                      type: "Unripe",
+                      count: classification.unripe.toString(),
                     ),
+                    VerticalDivider(
+                        thickness: 4,
+                        color: Theme.of(context).colorScheme.primary),
+                    ResultBox(
+                      type: "Infested",
+                      count: classification.infectedBerry.toString(),
+                    ),
+                    VerticalDivider(
+                        thickness: 4,
+                        color: Theme.of(context).colorScheme.primary),
+                    ResultBox(
+                      type: "Entry Hole",
+                      count: classification.entryHole.toString(),
+                    ),
+                    VerticalDivider(
+                        thickness: 4,
+                        color: Theme.of(context).colorScheme.primary),
                   ],
                 )
               ],
@@ -65,5 +104,29 @@ class InformationContainer extends StatelessWidget {
         ),
       )),
     );
+  }
+}
+
+class ResultBox extends StatelessWidget {
+  final String count;
+  final String type;
+  const ResultBox({
+    super.key,
+    required this.count,
+    required this.type,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Text(count),
+      const SizedBox(
+        height: 5,
+      ),
+      Text(
+        type,
+        style: const TextStyle(fontSize: 12),
+      ),
+    ]);
   }
 }
