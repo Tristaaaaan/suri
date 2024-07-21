@@ -19,6 +19,7 @@ List<Widget> pages = [
 class MainPage extends ConsumerWidget {
   MainPage({super.key});
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userInfoStream = ref.watch(userInfoProvider(_auth.currentUser!.uid));

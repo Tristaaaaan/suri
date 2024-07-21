@@ -50,11 +50,12 @@ class RegularButton extends ConsumerWidget {
                   : () async {
                       final signInNotifier =
                           ref.read(googleSignInLoadingProvider.notifier);
+
                       signInNotifier.setLoading(buttonKey, true);
-                      await ref
+                      ref
                           .read(authServicesProvider)
                           .signInWithGoogle(ref, context);
-
+                      // await Future.delayed(const Duration(seconds: 10));
                       signInNotifier.setLoading(buttonKey, false);
                     },
           child: Row(

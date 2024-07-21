@@ -13,6 +13,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final detectionInfo = ref.watch(detectionInfoProvider);
+
     return Center(
       child: Scaffold(
         body: detectionInfo.when(
