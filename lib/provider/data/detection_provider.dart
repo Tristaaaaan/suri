@@ -6,8 +6,7 @@ import 'package:suri/model/data_model.dart';
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 // Define a model for the user data
-final detectionInfoProvider =
-    StreamProvider.autoDispose<List<DataModel>>((ref) {
+final detectionInfoProvider = StreamProvider<List<DataModel>>((ref) {
   final startOfDay = getStartOfDayInMillis();
   final endOfDay = getEndOfDayInMillis();
 

@@ -4,11 +4,11 @@ import 'package:suri/services/auth/auth_services.dart';
 
 final googleSignInLoading = StateProvider<bool>((ref) => false);
 
-final authServicesProvider = Provider.autoDispose<AuthServices>((ref) {
+final authServicesProvider = Provider<AuthServices>((ref) {
   return AuthServices();
 });
 
-final authStateProvider = StreamProvider.autoDispose<User?>((ref) {
+final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
 

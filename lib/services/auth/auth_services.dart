@@ -57,12 +57,11 @@ class AuthServices {
           await docRef.set(newUserData.toMap());
         }
 
-        await Future.delayed(const Duration(seconds: 5));
         return userCredential;
       }
       return null;
     } catch (e) {
-      // await signOutAccount(ref); // Sign out the user
+      await signOutAccount(ref); // Sign out the user
 
       return null;
     }
