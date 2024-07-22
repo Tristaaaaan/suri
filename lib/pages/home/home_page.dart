@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:suri/components/container/info_container.dart';
 import 'package:suri/components/loading/data_loading.dart';
+import 'package:suri/components/placeholder/place_holder.dart';
 import 'package:suri/pages/home/charts_data.dart';
 import 'package:suri/provider/data/detection_provider.dart';
 
@@ -20,43 +20,14 @@ class HomePage extends ConsumerWidget {
         body: detectionInfo.when(
           data: (data) {
             return data.isEmpty
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            height: 200,
-                            width: 200,
-                            "assets/icons/no-notifications--social-media-no-notifications.svg",
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            "Whoops!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          const Text(
-                            textAlign: TextAlign.center,
-                            "Looks like there is no data available yet today.",
-                            style: TextStyle(
-                                fontSize: 15, fontStyle: FontStyle.italic),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
+                ? const DataPlaceHolder(
+                    imagePath:
+                        "assets/icons/no-notifications--social-media-no-notifications.svg",
+                    imageHeight: 250,
+                    imageWidth: 250,
+                    title: "Whoops!",
+                    description:
+                        "Looks like there is no data available yet today.")
                 : SingleChildScrollView(
                     child: Column(
                       children: [
@@ -248,9 +219,13 @@ class HomePage extends ConsumerWidget {
                     ),
                   );
           },
-          error: (error, stackTrace) {
-            return Text(error.toString());
-          },
+          error: (error, stackTrace) => const DataPlaceHolder(
+              imagePath:
+                  "assets/icons/Page-Not-Found-4--Streamline-Brooklyn.svg",
+              imageHeight: 300,
+              imageWidth: 300,
+              title: "Oh snap!",
+              description: "Operation could not be completed."),
           loading: () {
             return Shimmer.fromColors(
               baseColor: Colors.grey[400]!,
