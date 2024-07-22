@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/components/container/profile_settings.dart';
 import 'package:suri/functions/modify_profile_image_size.dart';
+import 'package:suri/pages/auth/signin_or_signup.dart';
 import 'package:suri/pages/home/about_page.dart';
 import 'package:suri/pages/home/help_page.dart';
 import 'package:suri/provider/auth/auth_providers.dart';
@@ -122,10 +123,17 @@ class ProfilePage extends ConsumerWidget {
               icon: Icons.logout,
               onTap: () async {
                 await ref.read(authServicesProvider).signOutAccount(ref);
-
                 if (context.mounted) {
-                  Navigator.pop(context);
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SignInOrSignUp()),
+                  );
                 }
+
+                // if (context.mounted) {
+                //   Navigator.pop(context);
+                // }
               },
             )
           ],

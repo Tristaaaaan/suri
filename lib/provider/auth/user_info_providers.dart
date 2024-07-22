@@ -7,7 +7,7 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 // Define a model for the user data
 final userInfoProvider =
-    StreamProvider.autoDispose.family<UserModel, String>((ref, userId) {
+    StreamProvider.family<UserModel, String>((ref, userId) {
   final document = _firestore.collection("users").doc(userId);
   return document.snapshots().map(
         (snapshot) => UserModel.fromSnapshot(snapshot),

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:suri/model/user_model.dart';
-import 'package:suri/provider/auth/auth_providers.dart';
 import 'package:suri/provider/auth/user_info_providers.dart';
 import 'package:suri/provider/data/detection_provider.dart';
 import 'package:suri/provider/messaging/messaging_providers.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class AuthServices {
   Future<UserCredential?> signInWithGoogle(
@@ -69,10 +69,10 @@ class AuthServices {
 
   Future<void> signOutAccount(WidgetRef ref) async {
     // Cleaning all listeners to prevent permission denied error when signing out
-    ref.invalidate(authStateProvider);
+
     ref.invalidate(userInfoProvider);
     ref.invalidate(detectionInfoProvider);
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
     await GoogleSignIn().signOut();
   }
 }
