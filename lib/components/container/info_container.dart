@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:suri/components/container/result_box.dart';
 import 'package:suri/components/dialog/info_dialog.dart';
+import 'package:suri/components/snackbar/information_snackbar.dart';
 import 'package:suri/model/data_model.dart';
 
 class InformationContainer extends StatelessWidget {
@@ -15,11 +17,17 @@ class InformationContainer extends StatelessWidget {
     final ClassificationModel classification = data.classCounts;
     return GestureDetector(
       onTap: () {
-        showInfoDialog(
-          context,
-          data.classCounts,
-          data.downloadUrl,
-        );
+        if (data.downloadUrl != null) {
+          showInfoDialog(
+            context,
+            data.classCounts,
+            DateFormat('hh:mm:ss a').format(data.timestamp),
+            data.downloadUrl,
+          );
+        } else {
+          informationSnackBar(
+              context, Icons.info, "This data does not have an image to show");
+        }
       },
       child: IntrinsicHeight(
           child: Container(
@@ -27,15 +35,9 @@ class InformationContainer extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+              color: Theme.of(context).colorScheme.primary, width: 3),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,26 +45,6 @@ class InformationContainer extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          DateFormat('EEEE, MMMM d, yyyy')
-                              .format(data.timestamp),
-                        ),
-                        Text(
-                          DateFormat('EEEE, MMMM d, yyyy')
-                              .format(data.timestamp),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
                 Row(
                   children: [
                     ResultBox(
@@ -104,29 +86,5 @@ class InformationContainer extends StatelessWidget {
         ),
       )),
     );
-  }
-}
-
-class ResultBox extends StatelessWidget {
-  final String count;
-  final String type;
-  const ResultBox({
-    super.key,
-    required this.count,
-    required this.type,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      Text(count),
-      const SizedBox(
-        height: 5,
-      ),
-      Text(
-        type,
-        style: const TextStyle(fontSize: 12),
-      ),
-    ]);
   }
 }

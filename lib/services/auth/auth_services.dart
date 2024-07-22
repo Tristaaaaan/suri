@@ -9,6 +9,7 @@ import 'package:suri/provider/data/detection_provider.dart';
 import 'package:suri/provider/messaging/messaging_providers.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class AuthServices {
   Future<UserCredential?> signInWithGoogle(
@@ -68,9 +69,10 @@ class AuthServices {
 
   Future<void> signOutAccount(WidgetRef ref) async {
     // Cleaning all listeners to prevent permission denied error when signing out
+
     ref.invalidate(userInfoProvider);
     ref.invalidate(detectionInfoProvider);
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
     await GoogleSignIn().signOut();
   }
 }

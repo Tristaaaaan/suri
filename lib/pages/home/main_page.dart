@@ -19,6 +19,7 @@ List<Widget> pages = [
 class MainPage extends ConsumerWidget {
   MainPage({super.key});
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userInfoStream = ref.watch(userInfoProvider(_auth.currentUser!.uid));
@@ -38,31 +39,34 @@ class MainPage extends ConsumerWidget {
               error: (error, stackTrace) => Container(),
               loading: () => Container(),
             ),
-            const Text("Welcome back", style: TextStyle(fontSize: 16))
+            const Text("Welcome back!", style: TextStyle(fontSize: 16))
           ],
         ),
-        automaticallyImplyLeading: false,
         actions: [
           userInfoStream.when(
             data: (user) {
-              return GestureDetector(
-                onTap: () {
-                  ref.read(userNotificationProvider.notifier).state =
-                      user.notification;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                        imageUrl: user.imageUrl!,
-                        name: user.name!,
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(userNotificationProvider.notifier).state =
+                        user.notification;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                          imageUrl: user.imageUrl!,
+                          name: user.name!,
+                        ),
                       ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundImage: NetworkImage(
+                      user.imageUrl!,
                     ),
-                  );
-                },
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  backgroundImage: NetworkImage(
-                    user.imageUrl!,
                   ),
                 ),
               );
